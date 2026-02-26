@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USING BOOTSTRAP FORM</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+    #matrix {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    body {
+        background-color: #000;
+        font-family: 'Courier New', monospace;
+        color: #00ff00;
+        height: 100vh;
+    }
+
+    .hacker-box {
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #00ff00;
+        box-shadow: 0 0 20px #00ff00;
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+        background-color: #000;
+        border: 1px solid #00ff00;
+        color: #00ff00;
+    }
+
+    .form-control:focus,
+    .form-select:focus,
+    textarea:focus {
+        background-color: #000;
+        color: #00ff00;
+        border-color: #00ff00;
+        box-shadow: 0 0 10px #00ff00;
+    }
+
+    label {
+        color: #00ff00;
+    }
+
+    /* FIX DATE ICON COLOR */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+    }
+
+    /* ICON STYLE */
+    .input-group-text {
+        background-color: #000;
+        border: 1px solid #00ff00;
+        color: #00ff00;
+    }
+
+    .btn-hacker {
+        background-color: transparent;
+        border: 1px solid #00ff00;
+        color: #00ff00;
+    }
+
+    .btn-hacker:hover {
+        background-color: #00ff00;
+        color: #000;
+        box-shadow: 0 0 15px #00ff00;
+    }
+
+    h3 {
+        text-align: center;
+        text-shadow: 0 0 10px #00ff00;
+    }
+    ::placeholder {
+    color: #00cc00 !important;
+    opacity: 0.8;
+    }
+
+</style>
+
+</head>
+
+<body class="d-flex justify-content-center align-items-center">
+    <canvas id="matrix"></canvas>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <form id="userform" class="col-md-5 p-4 rounded hacker-box">
+
+            <h3>USER INFORMATION FORM</h3>
+
+            <!-- Fullname -->
+            <div class="mb-3">
+                <label for="fullname" class="form-label" >Fullname:</label>
+                <div class="input-group">
+                    <span class="input-group-text">👤</span>
+                    <input type="text" class="form-control" id="fullname"
+                        placeholder="Enter your fullname" required>
+                </div>
+            </div>
+
+
+            <!-- Gender -->
+            <div class="mb-3">
+                <label class="form-label">Gender</label><br>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender"
+                        id="male" value="male" checked>
+                    <label class="form-check-label" for="male">Male</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender"
+                        id="female" value="female">
+                    <label class="form-check-label" for="female">Female</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender"
+                        id="other" value="other">
+                    <label class="form-check-label" for="other">Other</label>
+                </div>
+            </div>
+
+            <!-- Salary -->
+            <div class="mb-3">
+                <label for="salary" class="form-label">Salary</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" id="salary"
+                        placeholder="Enter your salary" required>
+                </div>
+            </div>
+
+
+            <!-- Date of Birth -->
+            <div class="mb-3">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" required>
+            </div>
+
+            <!-- Position -->
+            <div class="mb-3">
+                <label for="position" class="form-label">Position</label>
+                <div class="input-group">
+                    <span class="input-group-text">💼</span>
+                    <select id="position" class="form-select" required>
+                        <option selected>Please select your position</option>
+                        <option value="mis" id="mis">MIS</option>
+                        <option value="design" id="design">DESIGN</option>
+                        <option value="bit" id="bit">BIT</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description"
+                    placeholder="Enter your description"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center">
+                <button type="submit" id="submit" class="btn btn-hacker me-3">Submit</button>
+                <button type="reset" id="reset" class="btn btn-hacker">Clear</button>
+                <!-- Output -->
+                <div id="result" class="mt-3"></div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<!-- animate -->
+<script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) {
+        drops[x] = 1;
+    }
+
+    function draw() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#00ff00";
+        ctx.font = fontSize + "px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters.charAt(Math.floor(Math.random() * letters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            drops[i]++;
+        }
+    }
+
+    setInterval(draw, 33);
+
+    window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+</script>
+
+<!-- JS -->
+<script src="../Hosting/Js/index.js"></script>
+
+
+</body>
+</html>
